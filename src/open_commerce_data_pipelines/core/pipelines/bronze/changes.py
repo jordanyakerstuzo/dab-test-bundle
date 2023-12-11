@@ -6,6 +6,7 @@ from sprak.io import IoResourceFormats
 from sprak.io.stream import StreamIoOutputModes
 from sprak.pipelines import SingleSourceDataPipeline, SingleSourceDataPipelineConfig
 
+from open_commerce_data_pipelines.core.mappers.kinesis import KinesisMapper
 from open_commerce_data_pipelines.core.schemas.aws import KINESIS_MESSAGE_SCHEMA
 from open_commerce_data_pipelines.core.schemas.models.bronze import CHANGES_BRONZE_STAGE_1_SCHEMA
 
