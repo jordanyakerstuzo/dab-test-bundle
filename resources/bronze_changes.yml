@@ -67,10 +67,10 @@ resources:
               spark.sql.shuffle.partitions: "4"
 
             spark_env_vars:
-              DD_API_KEY: "{secrets/data_dog/api_key}"
-              DD_APP_KEY: "{secrets/data_dog/app_key}"
+              DD_API_KEY: "{{secrets/data_dog/api_key}}"
+              DD_APP_KEY: "{{secrets/data_dog/app_key}}"
               DD_ENV: ${var.environment}
               DD_SITE: datadoghq.com
               DD_STAGE: ${var.stage}
-              GITHUB_SERVICE_USER_TOKEN: "{secrets/github/service_user_token}"
-              GITHUB_SERVICE_USER: "{secrets/github/service_user}"
+              GITHUB_SERVICE_USER_TOKEN: "{{secrets/github/service_user_token}}"
+              GITHUB_SERVICE_USER: "{{secrets/github/service_user}}"
