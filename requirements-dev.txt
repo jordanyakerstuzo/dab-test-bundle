@@ -1,0 +1,52 @@
+## requirements-dev.txt: dependencies for local development.
+##
+## For defining dependencies used by jobs in Databricks Workflows, see
+## https://docs.databricks.com/dev-tools/bundles/library-dependencies.html
+# This is pegged to a specific version to match the Databricks DBR's.
+pyspark==3.3.0
+
+# Support Libraries
+delta-spark==2.1.0
+pandas==1.3.4
+pyarrow==7.0.0
+git+https://github.com/jordanyakerstuzo/sparkly@chore/upgrade-dependencies#egg=sparkly
+git+https://github.com/stuzo/sprak@master#egg=sprak
+pysftp>=0.2.9
+boto3>=1.24.54
+
+# Development Libraries
+case-convert>=1.1.0
+pylint>=2.5.2
+pep8-naming>=0.5.0
+pytz>=2023.3
+factory_boy>=3.2.1
+python-dateutil~=2.8.2
+setuptools~=67.2.0
+py4j~=0.10.9.3
+
+## pytest is the default package used for testing
+callee>=0.3.1
+Faker>=13.15.1
+mock>=4.0.3
+pytest>=3.8.1
+pytest-cov>=2.5.1
+pytest-faker>=2.0.0
+pytest-mock>=3.6.1
+pytest-watch>=4.2.0
+pytest-testmon>=1.3.3
+spark-testing-base>=0.10.0
+
+## databricks-connect can be used to run parts of this project locally.
+## See https://docs.databricks.com/dev-tools/databricks-connect.html.
+##
+## databricks-connect is automatically installed if you're using Databricks
+## extension for Visual Studio Code
+## (https://docs.databricks.com/dev-tools/vscode-ext/dev-tasks/databricks-connect.html).
+##
+## To manually install databricks-connect, either follow the instructions
+## at https://docs.databricks.com/dev-tools/databricks-connect.html
+## to install the package system-wide. Or uncomment the line below to install a
+## version of db-connect that corresponds to the Databricks Runtime version used
+## for this project.
+#
+# databricks-connect>=13.3,<13.4

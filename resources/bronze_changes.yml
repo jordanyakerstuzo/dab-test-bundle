@@ -1,0 +1,76 @@
+# yaml-language-server: $schema=../bundle_config_schema.json
+
+# The main job for test_bundle
+resources:
+  jobs:
+    bronze_changes:
+      name: bronze-changes
+
+      email_notifications:
+        on_failure:
+          - jordan.yaker@stuzo.com
+        no_alert_for_skipped_runs: true
+
+      webhook_notifications:
+        on_start:
+          - id: ${var.slack_webhook_id}
+        on_success:
+          - id: ${var.slack_webhook_id}
+        on_failure:
+          - id: ${var.slack_webhook_id}
+
+      continuous:
+        pause_status: PAUSED
+
+      tasks:
+        - task_key: bronze-changes
+          job_cluster_key: job_cluster
+
+          notebook_task:
+            notebook_path: ../notebooks/bronze/changes/stage_1.ipynb
+            base_parameters:
+              bronze_database_path: s3a://oc-${bundle.target}-data-lake-bronze
+              changes_raw_input_stream: oc-${bundle.target}-cdc-data-stream
+
+          libraries:
+            # By default we just include the .whl file generated for the open_commerce_data_pipelines package.
+            # See https://docs.databricks.com/dev-tools/bundles/library-dependencies.html
+            # for more information on how to add other libraries.
+            - whl: ../dist/*.whl
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            enable_elastic_disk: true
+            node_type_id: m5a.2xlarge
+            num_workers: 0
+            runtime_engine: STANDARD
+            spark_version: 13.3.x-scala2.12
+
+            aws_attributes:
+              first_on_demand: 1
+              availability: SPOT_WITH_FALLBACK
+              zone_id: auto
+              instance_profile_arn: arn:aws:iam::${var.aws_account}:instance-profile/oc-${bundle.target}-databricks-instance-profile
+
+            custom_tags:
+              Environment: ${var.environment}
+              Namespace: oc
+              Component: databricks
+              Stage: ${var.stage}
+              ResourceClass: SingleNode
+
+            spark_conf:
+              spark.databricks.cluster.profile: singleNode
+              spark.databricks.hive.metastore.glueCatalog.enabled: "true"
+              spark.master: local[*, 4]
+              spark.sql.shuffle.partitions: "4"
+
+            spark_env_vars:
+              DD_API_KEY: "{secrets/data_dog/api_key}"
+              DD_APP_KEY: "{secrets/data_dog/app_key}"
+              DD_ENV: ${var.environment}
+              DD_SITE: datadoghq.com
+              DD_STAGE: ${var.stage}
+              GITHUB_SERVICE_USER_TOKEN: "{secrets/github/service_user_token}"
+              GITHUB_SERVICE_USER: "{secrets/github/service_user}"
