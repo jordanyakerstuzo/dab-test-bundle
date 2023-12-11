@@ -41,6 +41,7 @@ resources:
       job_clusters:
         - job_cluster_key: job_cluster
           new_cluster:
+            data_security_mode: SINGLE_USER
             enable_elastic_disk: true
             node_type_id: m5a.2xlarge
             num_workers: 0
